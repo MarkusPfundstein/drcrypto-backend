@@ -14,7 +14,7 @@ async function init(config) {
   require('./src/models/user');
   const UserModel = db.model('UserModel');
 
-  const state = {
+  const context = {
     models: {
       UserModel,
     },
@@ -28,18 +28,16 @@ async function init(config) {
   //api.use(bodyParser.urlencoded({ extended: true}))
   api.use(bodyParser.json())
 
-  api.use('/user', userApi.init(state));
+  api.use('/user', userApi.init(context));
 
   await api.listen(config.api.port);
 
-
-  // return global state of app
-  return state;
+  return context;
 }
 
 init(require('./config'))
-  .then((state) => {
-    console.log(`server running on port ${state.config.api.port}`);  
+  .then((context) => {
+    console.log(`server running on port ${context.config.api.port}`);  
   })
   .catch(err => {
     console.error(err);
